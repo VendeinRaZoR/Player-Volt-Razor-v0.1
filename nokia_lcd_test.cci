@@ -1,0 +1,7 @@
+VERSION:3 SOURCE_TIMESTAMP:48798C0B
+NODE:I LEVEL:0 LINE:12 "C:\Program Files\cvavr\menu.c"
+NODE:I LEVEL:0 LINE:13 "C:\Program Files\cvavr\inc\sleep.h"
+NODE:V LEVEL:0 LINE:15 "vcc -> RAM:????"
+NODE:F LEVEL:0 LINE:19 "ADC_Init(void)"
+NODE:F LEVEL:0 LINE:26 "ReadADC(unsigned char ref_channel)"
+NODE:F LEVEL:0 LINE:38 "main(void)"

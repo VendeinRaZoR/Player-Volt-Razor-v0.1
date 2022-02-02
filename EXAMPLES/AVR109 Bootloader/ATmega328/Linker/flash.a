@@ -1,0 +1,260 @@
+;//******************************************************************************
+;// Bootloader based on Atmel application note AVR109 communication protocol
+;//
+;// (C) 2010-2012 Pavel Haiduc, HP InfoTech s.r.l.,
+;// All rights reserved
+;//
+;// Compiler: CodeVisionAVR V2.60+
+;// Version: 1.00
+;//******************************************************************************
+;
+;#include "defines.h"
+;PCODE: $00000000 VOL: 0
+	#ifndef __SLEEP_DEFINED__
+;PCODE: $00000001 VOL: 0
+	#define __SLEEP_DEFINED__
+;PCODE: $00000002 VOL: 0
+	.EQU __se_bit=0x01
+;PCODE: $00000003 VOL: 0
+	.EQU __sm_mask=0x0E
+;PCODE: $00000004 VOL: 0
+	.EQU __sm_adc_noise_red=0x02
+;PCODE: $00000005 VOL: 0
+	.EQU __sm_powerdown=0x04
+;PCODE: $00000006 VOL: 0
+	.EQU __sm_powersave=0x06
+;PCODE: $00000007 VOL: 0
+	.EQU __sm_standby=0x0C
+;PCODE: $00000008 VOL: 0
+	.EQU __sm_ext_standby=0x0E
+;PCODE: $00000009 VOL: 0
+	.SET power_ctrl_reg=smcr
+;PCODE: $0000000A VOL: 0
+	#endif
+;PCODE: $0000000B VOL: 0
+;PCODE: $0000000C VOL: 0
+;PCODE: $0000000D VOL: 0
+     #define WR_SPMCR_REG_R22 out 0x37,r22
+;PCODE: $0000000E VOL: 0
+;PCODE: $0000000F VOL: 0
+;
+;#pragma warn-
+;
+;unsigned char __AddrToZByteToSPMCR_LPM(void flash *addr, unsigned char ctrl)
+; 0001 0010 {
+
+	.CSEG
+;PCODE: $00000010 VOL: 0
+;PCODE: $00000011 VOL: 0
+; 0001 0011 #asm
+;PCODE: $00000012 VOL: 0
+;	*addr -> Y+1
+;	ctrl -> Y+0
+;PCODE: $00000013 VOL: 0
+; 0001 0012      ldd  r30,y+1
+     ldd  r30,y+1
+;PCODE: $00000014 VOL: 0
+; 0001 0013      ldd  r31,y+2
+     ldd  r31,y+2
+;PCODE: $00000015 VOL: 0
+; 0001 0014      ld   r22,y
+     ld   r22,y
+;PCODE: $00000016 VOL: 0
+; 0001 0015      WR_SPMCR_REG_R22
+     WR_SPMCR_REG_R22
+;PCODE: $00000017 VOL: 0
+; 0001 0016      lpm
+     lpm
+;PCODE: $00000018 VOL: 0
+; 0001 0017      mov  r30,r0
+     mov  r30,r0
+;PCODE: $00000019 VOL: 0
+;PCODE: $0000001A VOL: 0
+; 0001 0018 #endasm
+; 0001 0019 }
+;PCODE: $0000001B VOL: 0
+;PCODE: $0000001C VOL: 0
+;PCODE: $0000001D VOL: 0
+;
+;void __DataToR0ByteToSPMCR_SPM(unsigned char data, unsigned char ctrl)
+; 0001 001C {
+;PCODE: $0000001E VOL: 0
+;PCODE: $0000001F VOL: 0
+; 0001 001D #asm
+;PCODE: $00000020 VOL: 0
+;	data -> Y+1
+;	ctrl -> Y+0
+;PCODE: $00000021 VOL: 0
+; 0001 001E      ldd  r0,y+1
+     ldd  r0,y+1
+;PCODE: $00000022 VOL: 0
+; 0001 001F      ld   r22,y
+     ld   r22,y
+;PCODE: $00000023 VOL: 0
+; 0001 0020      WR_SPMCR_REG_R22
+     WR_SPMCR_REG_R22
+;PCODE: $00000024 VOL: 0
+; 0001 0021      spm
+     spm
+;PCODE: $00000025 VOL: 0
+;PCODE: $00000026 VOL: 0
+; 0001 0022 #endasm
+; 0001 0023 }
+;PCODE: $00000027 VOL: 0
+;PCODE: $00000028 VOL: 0
+;PCODE: $00000029 VOL: 0
+;
+;void __AddrToZWordToR1R0ByteToSPMCR_SPM(void flash *addr, unsigned int data, unsigned char ctrl)
+; 0001 0026 {
+;PCODE: $0000002A VOL: 0
+;PCODE: $0000002B VOL: 0
+; 0001 0027 #asm
+;PCODE: $0000002C VOL: 0
+;	*addr -> Y+3
+;	data -> Y+1
+;	ctrl -> Y+0
+;PCODE: $0000002D VOL: 0
+; 0001 0028      ldd  r30,y+3
+     ldd  r30,y+3
+;PCODE: $0000002E VOL: 0
+; 0001 0029      ldd  r31,y+4
+     ldd  r31,y+4
+;PCODE: $0000002F VOL: 0
+; 0001 002A      ldd  r0,y+1
+     ldd  r0,y+1
+;PCODE: $00000030 VOL: 0
+; 0001 002B      ldd  r1,y+2
+     ldd  r1,y+2
+;PCODE: $00000031 VOL: 0
+; 0001 002C      ld   r22,y
+     ld   r22,y
+;PCODE: $00000032 VOL: 0
+; 0001 002D      WR_SPMCR_REG_R22
+     WR_SPMCR_REG_R22
+;PCODE: $00000033 VOL: 0
+; 0001 002E      spm
+     spm
+;PCODE: $00000034 VOL: 0
+;PCODE: $00000035 VOL: 0
+; 0001 002F #endasm
+; 0001 0030 }
+;PCODE: $00000036 VOL: 0
+;PCODE: $00000037 VOL: 0
+;PCODE: $00000038 VOL: 0
+;
+;void __AddrToZByteToSPMCR_SPM(void flash *addr, unsigned char ctrl)
+; 0001 0033 {
+;PCODE: $00000039 VOL: 0
+;PCODE: $0000003A VOL: 0
+; 0001 0034 #asm
+;PCODE: $0000003B VOL: 0
+;	*addr -> Y+1
+;	ctrl -> Y+0
+;PCODE: $0000003C VOL: 0
+; 0001 0035      ldd  r30,y+1
+     ldd  r30,y+1
+;PCODE: $0000003D VOL: 0
+; 0001 0036      ldd  r31,y+2
+     ldd  r31,y+2
+;PCODE: $0000003E VOL: 0
+; 0001 0037      ld   r22,y
+     ld   r22,y
+;PCODE: $0000003F VOL: 0
+; 0001 0038      WR_SPMCR_REG_R22
+     WR_SPMCR_REG_R22
+;PCODE: $00000040 VOL: 0
+; 0001 0039      spm
+     spm
+;PCODE: $00000041 VOL: 0
+;PCODE: $00000042 VOL: 0
+; 0001 003A #endasm
+; 0001 003B }
+;PCODE: $00000043 VOL: 0
+;PCODE: $00000044 VOL: 0
+;PCODE: $00000045 VOL: 0
+;
+;void __AddrToZ24WordToR1R0ByteToSPMCR_SPM(void flash *addr, unsigned int data, unsigned char ctrl)
+; 0001 003E {
+;PCODE: $00000046 VOL: 0
+;PCODE: $00000047 VOL: 0
+; 0001 003F #asm
+;PCODE: $00000048 VOL: 0
+;	*addr -> Y+3
+;	data -> Y+1
+;	ctrl -> Y+0
+;PCODE: $00000049 VOL: 0
+; 0001 0040      ldd  r30,y+3
+     ldd  r30,y+3
+;PCODE: $0000004A VOL: 0
+; 0001 0041      ldd  r31,y+4
+     ldd  r31,y+4
+;PCODE: $0000004B VOL: 0
+; 0001 0042      ldd  r22,y+5
+     ldd  r22,y+5
+;PCODE: $0000004C VOL: 0
+; 0001 0043      out  rampz,r22
+     out  rampz,r22
+;PCODE: $0000004D VOL: 0
+; 0001 0044      ldd  r0,y+1
+     ldd  r0,y+1
+;PCODE: $0000004E VOL: 0
+; 0001 0045      ldd  r1,y+2
+     ldd  r1,y+2
+;PCODE: $0000004F VOL: 0
+; 0001 0046      ld   r22,y
+     ld   r22,y
+;PCODE: $00000050 VOL: 0
+; 0001 0047      WR_SPMCR_REG_R22
+     WR_SPMCR_REG_R22
+;PCODE: $00000051 VOL: 0
+; 0001 0048      spm
+     spm
+;PCODE: $00000052 VOL: 0
+;PCODE: $00000053 VOL: 0
+; 0001 0049 #endasm
+; 0001 004A }
+;PCODE: $00000054 VOL: 0
+;PCODE: $00000055 VOL: 0
+;PCODE: $00000056 VOL: 0
+;
+;void __AddrToZ24ByteToSPMCR_SPM(void flash *addr, unsigned char ctrl)
+; 0001 004D {
+;PCODE: $00000057 VOL: 0
+;PCODE: $00000058 VOL: 0
+; 0001 004E #asm
+;PCODE: $00000059 VOL: 0
+;	*addr -> Y+1
+;	ctrl -> Y+0
+;PCODE: $0000005A VOL: 0
+; 0001 004F      ldd  r30,y+1
+     ldd  r30,y+1
+;PCODE: $0000005B VOL: 0
+; 0001 0050      ldd  r31,y+2
+     ldd  r31,y+2
+;PCODE: $0000005C VOL: 0
+; 0001 0051      ldd  r22,y+3
+     ldd  r22,y+3
+;PCODE: $0000005D VOL: 0
+; 0001 0052      out  rampz,r22
+     out  rampz,r22
+;PCODE: $0000005E VOL: 0
+; 0001 0053      ld   r22,y
+     ld   r22,y
+;PCODE: $0000005F VOL: 0
+; 0001 0054      WR_SPMCR_REG_R22
+     WR_SPMCR_REG_R22
+;PCODE: $00000060 VOL: 0
+; 0001 0055      spm
+     spm
+;PCODE: $00000061 VOL: 0
+;PCODE: $00000062 VOL: 0
+; 0001 0056 #endasm
+; 0001 0057 }
+;PCODE: $00000063 VOL: 0
+;PCODE: $00000064 VOL: 0
+;PCODE: $00000065 VOL: 0
+;
+;#ifdef _WARNINGS_ON_
+;#pragma warn+
+;#endif
+;

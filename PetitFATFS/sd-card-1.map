@@ -1,0 +1,20 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+buf                                                               0x0160     256
+fs                                                                0x0260      42
+i                                                                 0x028A       1
+st                                                                0x028B       1
+f                                                                 0x028C       6
+CardType                                                          0x0292       1
+FatFs                                                             0x0293       2
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+s1                                                                R4,R5        2
+res                                                               R6,R7        2

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>6.1</ProjectVersion>
+    <ToolchainName>com.HPInfoTech.CodeVisionAVR.C</ToolchainName>
+    <ProjectGuid>{F83B519F-423D-497C-A76A-A46C3F34E8A0}</ProjectGuid>
+    <avrdevice>ATxmega128A4U</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>C</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.cof</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>USB CDC Example Xmega128A4U</AssemblyName>
+    <Name>USB CDC Example Xmega128A4U</Name>
+    <RootNamespace>USB CDC Example Xmega128A4U</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <OverrideVtorValue />
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <CV>
+        <CVProjectPath>"USB CDC Example Xmega128A4U.prj"</CVProjectPath>
+      </CV>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <CV>
+        <CVProjectPath>"USB CDC Example Xmega128A4U.prj"</CVProjectPath>
+      </CV>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Compile Include="src\main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\xmega\drivers\usb\" />
+    <Compile Include="src\asf\xmega\drivers\usb\usb_device.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\common\services\usb\udc\" />
+    <Compile Include="src\asf\common\services\usb\udc\udc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\common\services\usb\class\cdc\device\" />
+    <Compile Include="src\asf\common\services\usb\class\cdc\device\udi_cdc_desc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\asf\common\services\usb\class\cdc\device\udi_cdc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\uart_xmega.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\common\services\clock\xmega\" />
+    <Compile Include="src\asf\common\services\clock\xmega\sysclk.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\common\services\ioport\xmega\" />
+    <Compile Include="src\asf\common\services\ioport\xmega\ioport_compat.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\common\services\usb\class\cdc\device\example\atxmega128a4u_stk600-rc044x\" />
+    <Compile Include="src\asf\common\services\usb\class\cdc\device\example\atxmega128a4u_stk600-rc044x\ui.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\xmega\boards\stk600\rc044x\" />
+    <Compile Include="src\asf\xmega\boards\stk600\rc044x\init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\xmega\drivers\nvm\" />
+    <Compile Include="src\asf\xmega\drivers\nvm\nvm.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\xmega\drivers\usart\" />
+    <Compile Include="src\asf\xmega\drivers\usart\usart.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\xmega\drivers\cpu\" />
+    <Compile Include="src\asf\xmega\drivers\cpu\ccp.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="src\asf\common\services\sleepmgr\xmega\" />
+    <Compile Include="src\asf\common\services\sleepmgr\xmega\sleepmgr.c">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\vs\\CV.targets" />
+</Project>

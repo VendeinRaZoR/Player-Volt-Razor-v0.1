@@ -1,0 +1,43 @@
+; ======================================================================
+; USB interrupt handler
+;
+; This is the handler for the interrupt caused by the initial rising edge
+; on the D+ USB signal. The NRZI encoding and bit stuffing are removed,
+; and the packet is saved in one of the two input buffers. In some cases,
+; a reply packet is sent right away.
+;
+; When a DATA0/DATA1 packet directly follows a SETUP or OUT packet, while
+; this interrupt handler is not yet finished, there would be no time to
+; return and take another interrupt. In that case, the second packet is
+; decoded directly in the same invocation. A packet immediately following
+; an ignored packet is also decoded directly.
+;
+; This code is *extremely* time critical. For instance, there is not a
+; single spare cycle in the receiver loop, and only two in the transmitter
+; loop. In addition, the various code paths are laid out in such a way that
+; the various USB timeouts are not violated, in particular the maximum time
+; between the reception of a packet and the reply, which is 7.5 bit times
+; (TRSPIPD2) for a low-speed USB captive cable. The worst-case delay here
+; is 51 cycles, which is well below the 60 cycles limit, and even below the
+; 6.5 bit times limit for a detachable cable (TRSPIPD1).
+;
+; The interrupt handler must be reached within 34 cycles after D+ goes high
+; for the first time. The interrupt response time is 4 cycles, and the RJMP
+; in the vector table takes 2 cycles. Therefore, the interrupts should not
+; be disabled for longer than: 34 - 4 - 2 = 28 cycles. When the I-bit is
+; reenabled, a single instruction is always executed before a pending
+; interrupt is served, so this instruction should be included in the
+; calculation. For RETI, the next instruction can be anything, so we
+; should assume the worst-case of 4 cycles.
+;
+; The end-of-packet (EOP) is sampled in the second bit, because the USB
+; standard allows the EOP to be delayed by up to one bit. As the EOP
+; duration is two bits, this is not a problem.
+;
+; Stack usage including the return address: 11 bytes.
+;
+; Copyright 2006-2010 Dick Streefland
+;
+; This is free software, licensed under the terms of the GNU General
+; Public License as published by the Free Software Foundation.
+; ======================================================================

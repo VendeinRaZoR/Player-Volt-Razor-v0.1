@@ -1,0 +1,25 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+startup_delay_cnt                                                                 R5           1
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+timer1_ovf_isr                                                                    0x03C64     12
+main                                                                              0x03C70    368
+BlockLoad                                                                         0x03DE0    128
+BlockRead                                                                         0x03E60     53
+__DataToR0ByteToSPMCR_SPM                                                         0x03E9D      7
+__AddrToZWordToR1R0ByteToSPMCR_SPM                                                0x03EA4     10
+__AddrToZByteToSPMCR_SPM                                                          0x03EAE      8
+getchar                                                                           0x03EB6      7
+putchar                                                                           0x03EBD     10

@@ -1,0 +1,48 @@
+USB CDC Example based on Atmel ASF code.
+The example is designed to be compiled with the
+CodeVisionAVR V3.03 or later compiler.
+The target chip is ATxmega128A4U.
+
+Setup for STK600:
+- LEDS connector is connected to PORTA
+- SWITCHES are connected to PORTB
+- PC2 (RXC0) is connected to RS232 SPARE RXD
+- PC3 (TXC0) is connected to RS232 SPARE TXD
+- Warning! The AREF1 jumper must be removed
+  because AREF1 connected on PORTB0 overrides switch 0.
+
+Human interface on STK600:
+- Led 0 is on when USB line is in IDLE mode, and off in SUSPEND mode
+- Led 1 blinks when USB host has checked and enabled CDC interface
+- Led 2 is on when CDC port is open
+- Led 4 is on during data transfer from CDC to UART
+- Led 5 is on during data transfer from UART to CDC
+- Led 6 signals an frame error on UART
+- Led 7 signals an overflow
+
+Connect the STK600 USB port to your PC.
+Install the 'atmel_devices_cdc.inf' driver located in the
+...\EXAMPLES ATxmega\USB\USB CDC Example Xmega128A4U
+directory.
+After the driver is installed go to Windows 7 
+Control Panel|Devices and Printers.
+The 'Communication Device Class ASF Example' should
+be listed there along with the associated COM port number.
+Open a Terminal program (for example PuTTY from:
+http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+and select this COM port with Baud rate: 115200 and
+communication parameters 8N1.
+
+Connect the STK600 RS232 port to your PC.
+In the CodeVisionAVR IDE go to Settings|Terminal
+and select the COM port used for RS232, the
+Baud rate: 115200, communication parameters 8N1,
+enable Echo Transmitted Characters.
+Start the CodeVisionAVR Terminal using Tools|Terminal.
+In the CodeVisionAVR Terminal press the Connect button.
+Then type some text in the Terminal window.
+
+This text will be transmitted using the USB CDC serial
+port and displayed in the Windows Terminal program.
+
+

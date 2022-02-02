@@ -1,0 +1,6 @@
+VERSION:3 SOURCE_TIMESTAMP:485A353A
+NODE:I LEVEL:0 LINE:1 "C:\Program Files\cvavr\inc\delay.h"
+NODE:V LEVEL:0 LINE:3 "adc_data -> RAM:????"
+NODE:F LEVEL:0 LINE:5 "ADC_init(void)"
+NODE:F LEVEL:0 LINE:14 "ADC_result(unsigned char adc_input)"
+NODE:F LEVEL:0 LINE:27 "adc_isr(void)"

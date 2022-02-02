@@ -1,0 +1,9 @@
+VERSION:3 SOURCE_TIMESTAMP:488434EB
+NODE:I LEVEL:0 LINE:14 "C:\Program Files\cvavr\PetitFATFS\spi_2.h"
+NODE:F LEVEL:0 LINE:18 "SPI_Init(BYTE hs)"
+NODE:F LEVEL:0 LINE:42 "SPI_Release(void)"
+NODE:F LEVEL:0 LINE:49 "SPI_WriteByte(uint8_t data)"
+NODE:F LEVEL:0 LINE:56 "SPI_ReadByte(void)"
+NODE:F LEVEL:0 LINE:64 "SPI_WriteReadByte(uint8_t data)"
+NODE:F LEVEL:0 LINE:72 "SPI_WriteArray(uint8_t num,uint8_t * data)"
+NODE:F LEVEL:0 LINE:81 "SPI_WriteReadArray(uint8_t num,uint8_t * data)"

@@ -1,0 +1,9 @@
+VERSION:3 SOURCE_TIMESTAMP:48734C7B
+NODE:I LEVEL:0 LINE:11 "C:\Program Files\cvavr\defines.h"
+NODE:I LEVEL:0 LINE:12 "C:\Program Files\cvavr\flash.h"
+NODE:F LEVEL:0 LINE:16 "__AddrToZByteToSPMCR_LPM(flash void * addr,unsigned char ctrl)"
+NODE:F LEVEL:0 LINE:28 "__DataToR0ByteToSPMCR_SPM(unsigned char data,unsigned char ctrl)"
+NODE:F LEVEL:0 LINE:38 "__AddrToZWordToR1R0ByteToSPMCR_SPM(flash void * addr,unsigned int data,unsigned char ctrl)"
+NODE:F LEVEL:0 LINE:51 "__AddrToZByteToSPMCR_SPM(flash void * addr,unsigned char ctrl)"
+NODE:F LEVEL:0 LINE:62 "__AddrToZ24WordToR1R0ByteToSPMCR_SPM(flash void * addr,unsigned int data,unsigned char ctrl)"
+NODE:F LEVEL:0 LINE:77 "__AddrToZ24ByteToSPMCR_SPM(flash void * addr,unsigned char ctrl)"

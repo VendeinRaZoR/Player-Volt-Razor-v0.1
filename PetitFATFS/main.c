@@ -1,0 +1,130 @@
+//***************************************************************************
+//
+//  Author(s)...: Pashgan    http://ChipEnable.Ru   
+//
+//  Target(s)...: Mega16
+//
+//  Compiler....: CodeVision AVR
+//
+//  Description.: Воспроизведение wav файла с SD карты
+//
+//  Data........: 16.03.14
+//
+//***************************************************************************
+
+#include "compilers_4.h"
+#include "diskio.h"
+#include "pff.h"
+
+/* выводы микроконтроллера */
+
+#define LED_PORT   PORTD
+#define LED_DIR    DDRD
+#define LED_PIN    4
+
+#define PWM_PORT   PORTB
+#define PWM_DIR    DDRB
+#define PWM_PIN    3
+
+/* буфер */
+
+#define BUF_SIZE    256UL
+#define HALF_BUF   ((BUF_SIZE)/2)
+
+uint8_t buf[BUF_SIZE];
+
+/*переменные для доступа к SD*/
+
+FATFS fs;
+WORD s1;
+FRESULT res;
+
+
+static volatile uint8_t i;
+static uint8_t st;
+static char f[] = "1.wav";
+
+void main( void )
+{
+  st = 0;
+  i = 0;
+
+  /*настройка шим выхода*/
+  PWM_DIR |= (1<<PWM_PIN);
+  PWM_PORT &= ~(1<<PWM_PIN);
+  
+  /*статусный светодиод*/
+  LED_DIR |= (1<<LED_PIN);
+  LED_PORT &= ~(1<<LED_PIN);
+  
+  /*монтируем диск, открываем файл и заполняем весь буфер*/
+  res = pf_mount(&fs);
+  if (res == FR_OK){
+     res = pf_open(f);
+     if (res == FR_OK){
+	    res = pf_read(buf, BUF_SIZE, &s1);  
+     }
+  }
+  
+  /*если файл прочитался, то запускаем таймер*/
+  if (res == FR_OK){
+     TCCR0 = 0;
+     TCNT0 = 0;
+     TIMSK |= (1<<TOIE0);
+     TIFR = (1<<TOV0);
+     TCCR0 = (1<<COM01)|(0<<COM00)|(1<<WGM01)|(1<<WGM00)|(0<<CS02)|(0<<CS01)|(1<<CS00);
+  
+     LED_PORT |= (1<<LED_PIN);
+  }
+  else{
+  /*в противном случае зацикливаемся
+    и мигаем светодиодом */
+     while(1){
+	    LED_PORT ^= (1<<LED_PIN);
+	    delay_ms(300);
+	 }
+   
+  }
+    
+	
+  __enable_interrupt();
+  while(1){
+	
+    /*заполнение буфера данными*/
+     switch (st){
+     case 0:
+
+	   /*если индекс указывает на верхнюю половину
+	   буфера, то заполняем нижнюю половину*/ 
+       if (i >= HALF_BUF) {
+          pf_read(buf, HALF_BUF, &s1);
+          st = 1;
+       }
+     break;
+     
+     case 1:
+	   /*если индекс указывает на нижнюю половину
+	   буфера, то заполняем верхнюю половину*/ 
+        if (i < HALF_BUF) {
+          pf_read(&buf[HALF_BUF], HALF_BUF, &s1);
+          st = 0;
+        }
+        break;
+      
+     default:
+       break;
+     }
+     
+  }
+}
+
+/*ШИМ, который формирует нам аналоговый сигнал*/
+ISR(TIM0_OVF)
+{
+  uint8_t tmp = i;
+  
+  OCR0 = buf[tmp];
+  tmp++;
+  
+  i = tmp;
+}

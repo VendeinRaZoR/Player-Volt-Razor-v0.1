@@ -1,0 +1,180 @@
+/*
+  CodeVisionAVR C Compiler
+  (C) 2001 Pavel Haiduc, HP InfoTech S.R.L.
+
+  Maxim MAX3100 SPI UART functions
+*/
+
+// status bits
+bit max3100_nrts; // state of the RTS signal
+bit max3100_tx_ready;
+#if MAX3100_RX_BUFFER_SIZE==0
+bit max3100_rx_ready;
+static char max3100_rx_data;
+#elif ((MAX3100_RX_BUFFER_SIZE>0) && (MAX3100_RX_BUFFER_SIZE<256))
+static unsigned char max3100_rx_counter,max3100_rx_rd_index,max3100_rx_wr_index;
+static char max3100_rx_buffer[MAX3100_RX_BUFFER_SIZE];
+#endif
+
+// low level bit-banged SPI for MAX3100
+unsigned int max3100_spi(unsigned int d)
+{
+register unsigned char i;
+register unsigned int r,t;
+t=d;
+MAX3100_NCS=0;
+i=16;
+do
+    {
+    MAX3100_DIN=(unsigned char) *((unsigned char *) &t+1) & 0x80;
+    r<<=1;
+    MAX3100_SCLK=1;
+    r|=MAX3100_DOUT;
+    MAX3100_SCLK=0;
+    t<<=1;
+    }
+while (--i);
+MAX3100_NCS=1;
+return r;
+}
+
+// initialize MAX3100
+#if funcused max3100_init
+void max3100_init(unsigned char config)
+{
+MAX3100_DDR
+#asm("cli")
+MAX3100_SCLK=0;
+MAX3100_NCS=1;
+max3100_spi(0xcc00 | config);
+max3100_nrts=1;
+max3100_tx_ready=1;
+#if MAX3100_RX_BUFFER_SIZE==0
+max3100_rx_ready=0;
+#elif ((MAX3100_RX_BUFFER_SIZE>0) && (MAX3100_RX_BUFFER_SIZE<256))
+max3100_rx_buffer_overflow=0;
+max3100_rx_counter=0;
+max3100_rx_rd_index=0;
+max3100_rx_wr_index=0;
+#endif
+#asm("sei")
+}
+#endif
+
+// set the RTS signal
+#if funcused max3100_set_rts
+void max3100_set_rts(unsigned char nrts)
+{
+register unsigned int d=0x8400;
+if ((max3100_nrts=nrts)==0) d=0x8600;
+#asm("cli")
+max3100_spi(d);
+#asm("sei")
+}
+#endif
+
+// return the state of the CTS signal
+#if funcused max3100_get_cts
+unsigned char max3100_get_cts(void)
+{
+register unsigned int d=0x8400;
+if (max3100_nrts==0) d=0x8600;
+#asm("cli")
+d=max3100_spi(d);
+#asm("sei")
+return (((unsigned char) *((unsigned char *) &d+1) & 2)==0);
+}
+#endif
+
+// transmit a character
+#if funcused max3100_putchar | funcused max3100_puts | funcused max3100_putsf
+void max3100_putchar(char c)
+{
+register unsigned int d;
+d=0x8000 | (unsigned char) c;
+if (max3100_nrts==0) d|=0x200;
+while (!max3100_tx_ready);
+#asm("cli")
+max3100_tx_ready=0;
+max3100_spi(d);
+#asm("sei")
+}
+#endif
+
+// return the received character
+#if funcused max3100_getchar
+char max3100_getchar(void)
+{
+register char c;
+#if MAX3100_RX_BUFFER_SIZE==0
+while (max3100_rx_ready==0);
+c=max3100_rx_data;
+#asm("cli")
+max3100_rx_ready=0;
+#asm("sei")
+#elif ((MAX3100_RX_BUFFER_SIZE>0) && (MAX3100_RX_BUFFER_SIZE<256))
+while (max3100_rx_counter==0);
+c=max3100_rx_buffer[max3100_rx_rd_index];
+if (++max3100_rx_rd_index==MAX3100_RX_BUFFER_SIZE)
+   max3100_rx_rd_index=0;
+#asm("cli")
+--max3100_rx_counter;
+#asm("sei")
+#endif
+return c;
+}
+#endif
+
+// transmit a char string located in SRAM
+#if funcused max3100_puts
+void max3100_puts(char *str)
+{
+register char c;
+while (c=*str++) max3100_putchar(c);
+}
+#endif
+
+// transmit a char string located in FLASH
+#if funcused max3100_putsf
+void max3100_putsf(char flash *str)
+{
+register char c;
+while (c=*str++) max3100_putchar(c);
+}
+#endif
+
+#pragma optsize-
+interrupt [MAX3100_INT_VECTOR] void max3100_isr(void)
+{
+register unsigned int d;
+d=max3100_spi(0);
+// transmitter ready?
+max3100_tx_ready=(unsigned char) *((unsigned char *) &d+1) & 0x40;
+// a char is in the UART buffer?
+if ((unsigned char) *((unsigned char *) &d+1) & 0x80)
+   {
+   // framing error?
+   if ((unsigned char) *((unsigned char *) &d+1) & 4) return;
+   #if MAX3100_RX_BUFFER_SIZE==0
+   max3100_rx_data=*(unsigned char *) &d;
+   max3100_rx_ready=1;
+   #elif ((MAX3100_RX_BUFFER_SIZE>0) && (MAX3100_RX_BUFFER_SIZE<256))
+   // receive buffer overflow?
+   if (++max3100_rx_counter>MAX3100_RX_BUFFER_SIZE)
+      {
+      max3100_rx_buffer_overflow=1;
+      max3100_rx_counter=1;
+      max3100_rx_wr_index=0;
+      max3100_rx_rd_index=0;
+      };
+   // write the char in the receiver buffer
+   max3100_rx_buffer[max3100_rx_wr_index]=*(unsigned char *) &d;
+   if (++max3100_rx_wr_index==MAX3100_RX_BUFFER_SIZE)
+      max3100_rx_wr_index=0;
+   #endif
+   };
+}
+#ifdef _OPTIMIZE_SIZE_
+#pragma optsize+
+#endif
+

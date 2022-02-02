@@ -1,0 +1,29 @@
+ This example shows how to implement a USB Device Mass Storage
+ on Atmel MCU with USB module on a XMEGA-A3BU Xplained board.
+
+ The example uses all memories available on the board and connects these to
+ USB Device Mass Storage stack. After loading firmware, connect the
+ XMEGA-A3BU Xplained board to the USB Host. When connected to a USB host system
+ this application allows to display all available memories as a
+ removable disks in the Unix/Mac/Windows operating systems.
+ 
+ This example uses the native MSC driver on Unix/Mac/Windows OS, except for Win98.
+
+ The example uses the following module groups:
+ - Basic modules:
+   Startup, board, clock, interrupt, power management
+ - USB Device stack and MSC modules:
+   services/usb/
+   services/usb/udc/
+   services/usb/class/msc/
+ - Specific implementation:
+    - main.c,
+      initializes clock
+      initializes interrupt
+      manages UI
+    - specific implementation for each target "./examples/product_board/":
+       - conf_foo.h   configuration of each module
+       - ui.c        implement of user's interface (leds)
+
+ The memory data transfers are done outside USB interrupt routine.
+ This is done in the MSC process ("udi_msc_process_trans()") called by main loop.

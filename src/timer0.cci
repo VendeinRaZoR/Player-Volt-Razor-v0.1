@@ -1,0 +1,12 @@
+VERSION:3 SOURCE_TIMESTAMP:48688E41
+NODE:I LEVEL:0 LINE:1 "C:\Program Files\cvavr\inc\io.h"
+NODE:I LEVEL:0 LINE:2 "C:\Program Files\cvavr\inc\interrupt.h"
+NODE:I LEVEL:0 LINE:3 "C:\Program Files\cvavr\src\timer0.h"
+NODE:M LEVEL:0 LINE:5 "TIMER0_FREQ"
+NODE:M LEVEL:0 LINE:6 "TIMER0_PRESCALER"
+NODE:M LEVEL:0 LINE:7 "TIMER0_RELOAD_LO"
+NODE:M LEVEL:0 LINE:8 "TIMER0_RELOAD_HI"
+NODE:V LEVEL:0 LINE:15 "ms_ticks_byte -> RAM:????"
+NODE:F LEVEL:0 LINE:17 "timer0_init(void)"
+NODE:F LEVEL:0 LINE:27 "delay_ms(uint8_t ms)"
+NODE:F LEVEL:0 LINE:34 "SIGNAL(void)"

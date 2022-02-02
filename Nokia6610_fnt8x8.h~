@@ -1,0 +1,16 @@
+//***************************************************************************
+//  File........: Nokia6610_fnt8x8.h
+//  Author(s)...: Goncharenko Valery 
+//  URL(s)......: http://digitalchip.ru
+//  Device(s)...: ATMega8
+//  Compiler....: Winavr-20100110
+//  Description.: Demo LCD Nokia6610
+//  Data........: 21.06.12
+//  Version.....: 1.0 
+//***************************************************************************
+//  Формат символов: 8x8
+
+#include <pgmspace.h>
+
+flash unsigned char Nokia6610_fnt8x8[1][1]; 
+

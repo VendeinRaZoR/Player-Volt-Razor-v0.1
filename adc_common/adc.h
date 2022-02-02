@@ -1,0 +1,33 @@
+#include <delay.h>
+
+float adc_data;
+
+void ADC_init()
+{
+//воспользуемс€ значени€ми регистров, определенными ранее
+ADMUX = 0x00;
+         ADMUX |= (0 << REFS1)|(1 << REFS0);
+         ADCSRA = 0xCE;      
+}
+
+
+float ADC_result(unsigned char adc_input)
+{
+         ADMUX=adc_input | (ADMUX & 0xF0);    
+         ADMUX |= (0 << REFS1)|(1 << REFS0);
+//задержка дл€ стабилизации входного напр€жени€
+         delay_us(10);
+//начинаем преобразование (ADSC = 1)
+         ADCSRA |= 0x40;
+         while((ADCSRA & 0x10)==0); //ждем, пока ј÷ѕ закончит преобразование (ADIF = 0)
+        ADCSRA|=0x10;//устанавливаем ADIF
+        return ADCW;//ADCW - содержит ADCH и ADCL как нам нужно
+}
+
+interrupt [ADC_INT] void adc_isr(void)
+{
+adc_data=ADCW;
+
+ADCSRA|=0x40;
+}
+

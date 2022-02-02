@@ -1,0 +1,3 @@
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"tiny13_lcd.c" LINE:20
+lcd_puts_parallel DSTACK_USAGE:2 DSTACK_LEVEL:2 FILE:"lcd_common\lcd_com.h" LINE:200
+parallel_data DSTACK_USAGE:2 DSTACK_LEVEL:4 FILE:"lcd_common\lcd_com.h" LINE:36

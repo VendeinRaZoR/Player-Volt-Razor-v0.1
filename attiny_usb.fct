@@ -1,0 +1,4 @@
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"attiny_usb.c" LINE:77
+usb_poll DSTACK_USAGE:1 DSTACK_LEVEL:1 FILE:"usbtiny-1.7\usbtiny\usb.c" LINE:422
+usb_receive DSTACK_USAGE:7 DSTACK_LEVEL:8 FILE:"usbtiny-1.7\usbtiny\usb.c" LINE:209
+usb_out DSTACK_USAGE:3 DSTACK_LEVEL:11 FILE:"attiny_usb.c" LINE:16
