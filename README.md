@@ -33,3 +33,4 @@
 
 **Видео примера работы устройства**
 
+[![Watch the video](https://img.youtube.com/vi/nvsY_t1C7aY/maxresdefault.jpg)](https://youtu.be/nvsY_t1C7aY)
